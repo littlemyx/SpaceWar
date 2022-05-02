@@ -24,6 +24,7 @@ ColorShiftMaterial.key = THREE.MathUtils.generateUUID()
 extend({ ColorShiftMaterial })
 
 const Shader = (props) => {
+  const {route = "/box", ...restProps} = props
   const meshRef = useRef(null)
   const [hovered, setHover] = useState(false)
   const router = useStore((state) => state.router)
@@ -43,11 +44,11 @@ const Shader = (props) => {
       ref={meshRef}
       scale={hovered ? 1.1 : 1}
       onClick={() => {
-        router.push(`/box`)
+        router.push(route)
       }}
-      onPointerOver={(e) => setHover(true)}
-      onPointerOut={(e) => setHover(false)}
-      {...props}
+      onPointerOver={() => setHover(true)}
+      onPointerOut={() => setHover(false)}
+      {...restProps}
     >
       <boxBufferGeometry args={[1, 1, 1]} />
       {/* @ts-ignore */}

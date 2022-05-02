@@ -23,7 +23,8 @@ const DOM = () => {
 const R3F = () => {
   return (
     <>
-      <Shader />
+      <Shader position={[-2,0,0]} route="/space-war"/>
+      <Shader position={[2,0,0]} />
     </>
   )
 }
