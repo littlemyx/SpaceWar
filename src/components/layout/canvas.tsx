@@ -1,5 +1,7 @@
 import { Canvas } from '@react-three/fiber'
 import { Preload } from '@react-three/drei'
+import { Perf } from 'r3f-perf'
+
 import useStore from '@/helpers/store'
 
 const LCanvas = ({ children }) => {
@@ -14,6 +16,7 @@ const LCanvas = ({ children }) => {
       onCreated={(state) => state.events.connect(dom.current)}
     >
       <Preload all />
+      <Perf />
       {children}
     </Canvas>
   )
