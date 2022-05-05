@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 
 import Controller from '@/controls/ChasingControl/Implementation'
+import BasicInput from '@/controls/BasicInput'
 
 const BoxComponent = () => {
   // const defaultCamera = useThree((state) => state.camera)
@@ -18,23 +19,23 @@ const BoxComponent = () => {
   })
 
   useEffect(() => {
-    _controller.current = new Controller(group.current)
+    _controller.current = new Controller(group.current, new BasicInput())
   }, [])
 
   // Return the view, these are regular Threejs elements expressed in JSX
   return (
     <group ref={group}>
       <mesh
-        position={[1, 0, 0]}
+        position={[0, 0, 1]}
         onPointerOver={() => setHover(true)}
         onPointerOut={() => setHover(false)}
         scale={hovered ? 1.1 : 1}
       >
         <boxBufferGeometry args={[1, 1, 1]} />
-        <meshPhysicalMaterial color="hotpink" />
+        <meshPhysicalMaterial color="purple" />
       </mesh>
       <mesh
-        position={[-1, 0, 0]}
+        position={[0, 0, -1]}
         onPointerOver={() => setHover(true)}
         onPointerOut={() => setHover(false)}
         scale={hovered ? 1.1 : 1}

@@ -1,75 +1,7 @@
 import { Vector3, EventDispatcher, Quaternion } from 'three'
 import type { Object3D } from 'three'
 
-type Keys = 'forward' | 'backward' | 'left' | 'right' | 'space' | 'shift'
-
-class BasicInput {
-  keys: Record<Keys, boolean>
-
-  constructor() {
-    this.keys = {
-      forward: false,
-      backward: false,
-      left: false,
-      right: false,
-      space: false,
-      shift: false,
-    }
-
-    document.addEventListener(
-      'keydown',
-      (event) => this.onKeyDown(event),
-      false,
-    )
-    document.addEventListener('keyup', (event) => this.onKeyUp(event), false)
-  }
-
-  private onKeyDown(event) {
-    switch (event.keyCode) {
-      case 87: // w
-        this.keys.forward = true
-        break
-      case 65: // a
-        this.keys.left = true
-        break
-      case 83: // s
-        this.keys.backward = true
-        break
-      case 68: // d
-        this.keys.right = true
-        break
-      case 32: // SPACE
-        this.keys.space = true
-        break
-      case 16: // SHIFT
-        this.keys.shift = true
-        break
-    }
-  }
-
-  private onKeyUp(event) {
-    switch (event.keyCode) {
-      case 87: // w
-        this.keys.forward = false
-        break
-      case 65: // a
-        this.keys.left = false
-        break
-      case 83: // s
-        this.keys.backward = false
-        break
-      case 68: // d
-        this.keys.right = false
-        break
-      case 32: // SPACE
-        this.keys.space = false
-        break
-      case 16: // SHIFT
-        this.keys.shift = false
-        break
-    }
-  }
-}
+import type { Input } from '../types'
 
 class Controller extends EventDispatcher {
   private target: Object3D
@@ -79,9 +11,9 @@ class Controller extends EventDispatcher {
   private decceleration: Vector3
   private acceleration: Vector3
 
-  private input: BasicInput
+  private input: Input
 
-  constructor(target: Object3D) {
+  constructor(target: Object3D, input: Input) {
     super()
 
     this.target = target
@@ -89,9 +21,9 @@ class Controller extends EventDispatcher {
     this.position = new Vector3(0, 0, 0)
     this.velocity = new Vector3()
     this.decceleration = new Vector3(-0.0005, -0.0001, -5.0)
-    this.acceleration = new Vector3(1, 0.25, 50.0)
+    this.acceleration = new Vector3(1.0, 0.25, 50.0)
 
-    this.input = new BasicInput()
+    this.input = input
   }
   update(delta: number) {
     if (!this.target) {
@@ -140,6 +72,30 @@ class Controller extends EventDispatcher {
     if (this.input.keys.right) {
       _A.set(0, 1, 0)
       _Q.setFromAxisAngle(_A, 4.0 * -Math.PI * delta * this.acceleration.y)
+      _R.multiply(_Q)
+    }
+
+    if (this.input.keys.rollLeft) {
+      _A.set(0, 0, 1)
+      _Q.setFromAxisAngle(_A, 0.005 * Math.PI * delta * this.acceleration.z)
+      _R.multiply(_Q)
+    }
+
+    if (this.input.keys.rollRight) {
+      _A.set(0, 0, 1)
+      _Q.setFromAxisAngle(_A, 0.005 * -Math.PI * delta * this.acceleration.z)
+      _R.multiply(_Q)
+    }
+
+    if (this.input.keys.dive) {
+      _A.set(1, 0, 0)
+      _Q.setFromAxisAngle(_A, 1.0 * Math.PI * delta * this.acceleration.x)
+      _R.multiply(_Q)
+    }
+
+    if (this.input.keys.rise) {
+      _A.set(1, 0, 0)
+      _Q.setFromAxisAngle(_A, 1.0 * -Math.PI * delta * this.acceleration.x)
       _R.multiply(_Q)
     }
 
