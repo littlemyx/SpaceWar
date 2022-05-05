@@ -1,4 +1,4 @@
-export type Keys =
+export type KeysNames =
   | 'forward'
   | 'backward'
   | 'left'
@@ -10,6 +10,7 @@ export type Keys =
   | 'dive'
   | 'rise'
 
+export type InputKeys = Record<KeysNames, number>
 export interface Input {
-  keys: Record<Keys, boolean>
+  keys: InputKeys
 }

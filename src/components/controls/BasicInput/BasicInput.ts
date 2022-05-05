@@ -1,20 +1,20 @@
-import type { Keys, Input } from '../types'
+import type { InputKeys, Input } from '../types'
 
 class BasicInput implements Input {
-  keys: Record<Keys, boolean>
+  keys: InputKeys
 
   constructor() {
     this.keys = {
-      forward: false,
-      backward: false,
-      left: false,
-      right: false,
-      space: false,
-      shift: false,
-      rollLeft: false,
-      rollRight: false,
-      dive: false,
-      rise: false,
+      forward: 0,
+      backward: 0,
+      left: 0,
+      right: 0,
+      space: 0,
+      shift: 0,
+      rollLeft: 0,
+      rollRight: 0,
+      dive: 0,
+      rise: 0,
     }
 
     document.addEventListener(
@@ -28,34 +28,34 @@ class BasicInput implements Input {
   private onKeyDown(event) {
     switch (event.keyCode) {
       case 87: // w
-        this.keys.forward = true
+        this.keys.forward = 1
         break
       case 65: // a
-        this.keys.left = true
+        this.keys.left = 1
         break
       case 83: // s
-        this.keys.backward = true
+        this.keys.backward = 1
         break
       case 68: // d
-        this.keys.right = true
+        this.keys.right = 1
         break
       case 81: // q
-        this.keys.rollLeft = true
+        this.keys.rollLeft = 1
         break
       case 69: // e
-        this.keys.rollRight = true
+        this.keys.rollRight = 1
         break
       case 38: // arrowUp
-        this.keys.rise = true
+        this.keys.rise = 1
         break
       case 40: // arrowDown
-        this.keys.dive = true
+        this.keys.dive = 1
         break
       case 32: // SPACE
-        this.keys.space = true
+        this.keys.space = 1
         break
       case 16: // SHIFT
-        this.keys.shift = true
+        this.keys.shift = 1
         break
     }
   }
@@ -63,34 +63,34 @@ class BasicInput implements Input {
   private onKeyUp(event) {
     switch (event.keyCode) {
       case 87: // w
-        this.keys.forward = false
+        this.keys.forward = 0
         break
       case 65: // a
-        this.keys.left = false
+        this.keys.left = 0
         break
       case 83: // s
-        this.keys.backward = false
+        this.keys.backward = 0
         break
       case 68: // d
-        this.keys.right = false
+        this.keys.right = 0
         break
       case 81: // q
-        this.keys.rollLeft = false
+        this.keys.rollLeft = 0
         break
       case 69: // e
-        this.keys.rollRight = false
+        this.keys.rollRight = 0
         break
       case 38: // arrowUp
-        this.keys.rise = false
+        this.keys.rise = 0
         break
       case 40: // arrowDown
-        this.keys.dive = false
+        this.keys.dive = 0
         break
       case 32: // SPACE
-        this.keys.space = false
+        this.keys.space = 0
         break
       case 16: // SHIFT
-        this.keys.shift = false
+        this.keys.shift = 0
         break
     }
   }

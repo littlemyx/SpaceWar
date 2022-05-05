@@ -16,6 +16,7 @@
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "babel-plugin-glsl": "^1.0.0",
     "glsl-random": "^0.0.5",
+    "leva": "^0.9.25",
     "next": "^12.1.4",
     "r3f-perf": "^6.0.1",
     "react": "^18.0.0",

@@ -16,7 +16,7 @@ const LCanvas = ({ children }) => {
       onCreated={(state) => state.events.connect(dom.current)}
     >
       <Preload all />
-      <Perf />
+      <Perf position="bottom-right" />
       {children}
     </Canvas>
   )

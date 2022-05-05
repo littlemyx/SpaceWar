@@ -55,45 +55,45 @@ class Controller extends EventDispatcher {
       acceleration.multiplyScalar(2.0)
     }
 
-    if (this.input.keys.forward) {
-      velocity.z -= acceleration.z * delta
-    }
-
-    if (this.input.keys.backward) {
+    if (this.input.keys.forward > 0) {
       velocity.z += acceleration.z * delta
     }
 
-    if (this.input.keys.left) {
+    if (this.input.keys.backward > 0) {
+      velocity.z -= acceleration.z * delta
+    }
+
+    if (this.input.keys.left > 0) {
       _A.set(0, 1, 0)
       _Q.setFromAxisAngle(_A, 4.0 * Math.PI * delta * this.acceleration.y)
       _R.multiply(_Q)
     }
 
-    if (this.input.keys.right) {
+    if (this.input.keys.right > 0) {
       _A.set(0, 1, 0)
       _Q.setFromAxisAngle(_A, 4.0 * -Math.PI * delta * this.acceleration.y)
       _R.multiply(_Q)
     }
 
-    if (this.input.keys.rollLeft) {
-      _A.set(0, 0, 1)
-      _Q.setFromAxisAngle(_A, 0.005 * Math.PI * delta * this.acceleration.z)
-      _R.multiply(_Q)
-    }
-
-    if (this.input.keys.rollRight) {
+    if (this.input.keys.rollLeft > 0) {
       _A.set(0, 0, 1)
       _Q.setFromAxisAngle(_A, 0.005 * -Math.PI * delta * this.acceleration.z)
       _R.multiply(_Q)
     }
 
-    if (this.input.keys.dive) {
+    if (this.input.keys.rollRight > 0) {
+      _A.set(0, 0, 1)
+      _Q.setFromAxisAngle(_A, 0.005 * Math.PI * delta * this.acceleration.z)
+      _R.multiply(_Q)
+    }
+
+    if (this.input.keys.dive > 0) {
       _A.set(1, 0, 0)
       _Q.setFromAxisAngle(_A, 1.0 * Math.PI * delta * this.acceleration.x)
       _R.multiply(_Q)
     }
 
-    if (this.input.keys.rise) {
+    if (this.input.keys.rise > 0) {
       _A.set(1, 0, 0)
       _Q.setFromAxisAngle(_A, 1.0 * -Math.PI * delta * this.acceleration.x)
       _R.multiply(_Q)
