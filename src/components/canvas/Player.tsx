@@ -1,17 +1,22 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 import Movement from '@/components/controls/Movement'
 import ChasingCamera from '@/components/cameras/ChasingCamera'
 import type { Group } from 'three'
 
 const BoxComponent = () => {
-  const target = useRef<Group>(null)
+  const [target, setTarget] = useState(null)
+  const targetRef = useRef<Group>(null)
   const [hovered, setHover] = useState(false)
+
+  useEffect(() => {
+    setTarget(targetRef.current)
+  }, [targetRef])
 
   // Return the view, these are regular Threejs elements expressed in JSX
   return (
     <ChasingCamera target={target}>
-      <Movement ref={target}>
+      <Movement ref={targetRef}>
         <group>
           <mesh
             position={[0, 0, 1]}

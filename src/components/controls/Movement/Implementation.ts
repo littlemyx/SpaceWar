@@ -9,7 +9,8 @@ class Controller extends EventDispatcher {
   private position: Vector3
   private velocity: Vector3
   private decceleration: Vector3
-  private acceleration: Vector3
+  private movementAcceleration: Vector3
+  private rotationAcceleration: Vector3
 
   private input: Input
 
@@ -20,8 +21,9 @@ class Controller extends EventDispatcher {
 
     this.position = new Vector3(0, 0, 0)
     this.velocity = new Vector3()
-    this.decceleration = new Vector3(-0.0005, -0.0001, -5.0)
-    this.acceleration = new Vector3(1.0, 0.25, 50.0)
+    this.decceleration = new Vector3(-5.0, -0.0001, -5.0)
+    this.movementAcceleration = new Vector3(25.0, 25.0, 50.0)
+    this.rotationAcceleration = new Vector3(1.0, 0.25, 50.0)
 
     this.input = input
   }
@@ -38,9 +40,14 @@ class Controller extends EventDispatcher {
     )
 
     frameDecceleration.multiplyScalar(delta)
+
     frameDecceleration.z =
       Math.sign(frameDecceleration.z) *
       Math.min(Math.abs(frameDecceleration.z), Math.abs(velocity.z))
+
+    frameDecceleration.x =
+      Math.sign(frameDecceleration.x) *
+      Math.min(Math.abs(frameDecceleration.x), Math.abs(25))
 
     velocity.add(frameDecceleration)
 
@@ -49,53 +56,79 @@ class Controller extends EventDispatcher {
     const _A = new Vector3()
     const _R = controlObject.quaternion.clone()
 
-    const acceleration = this.acceleration.clone()
+    const movementAcceleration = this.movementAcceleration.clone()
 
     if (this.input.keys.shift) {
-      acceleration.multiplyScalar(2.0)
+      movementAcceleration.multiplyScalar(2.0)
     }
 
     if (this.input.keys.forward > 0) {
-      velocity.z += acceleration.z * delta
+      velocity.z -= movementAcceleration.z * delta
     }
 
     if (this.input.keys.backward > 0) {
-      velocity.z -= acceleration.z * delta
+      velocity.z += movementAcceleration.z * delta
     }
 
-    if (this.input.keys.left > 0) {
+    if (this.input.keys.strafeLeft > 0) {
+      velocity.x -= movementAcceleration.x * delta
+    }
+
+    if (this.input.keys.strafeRight > 0) {
+      velocity.x += movementAcceleration.x * delta
+    }
+
+    if (this.input.keys.yawLeft > 0) {
       _A.set(0, 1, 0)
-      _Q.setFromAxisAngle(_A, 4.0 * Math.PI * delta * this.acceleration.y)
+      _Q.setFromAxisAngle(
+        _A,
+        4.0 * Math.PI * delta * this.rotationAcceleration.y,
+      )
       _R.multiply(_Q)
     }
 
-    if (this.input.keys.right > 0) {
+    if (this.input.keys.yawRight > 0) {
       _A.set(0, 1, 0)
-      _Q.setFromAxisAngle(_A, 4.0 * -Math.PI * delta * this.acceleration.y)
+      _Q.setFromAxisAngle(
+        _A,
+        4.0 * -Math.PI * delta * this.rotationAcceleration.y,
+      )
       _R.multiply(_Q)
     }
 
     if (this.input.keys.rollLeft > 0) {
       _A.set(0, 0, 1)
-      _Q.setFromAxisAngle(_A, 0.005 * -Math.PI * delta * this.acceleration.z)
+      _Q.setFromAxisAngle(
+        _A,
+        0.005 * Math.PI * delta * this.rotationAcceleration.z,
+      )
       _R.multiply(_Q)
     }
 
     if (this.input.keys.rollRight > 0) {
       _A.set(0, 0, 1)
-      _Q.setFromAxisAngle(_A, 0.005 * Math.PI * delta * this.acceleration.z)
+      _Q.setFromAxisAngle(
+        _A,
+        0.005 * -Math.PI * delta * this.rotationAcceleration.z,
+      )
       _R.multiply(_Q)
     }
 
     if (this.input.keys.dive > 0) {
       _A.set(1, 0, 0)
-      _Q.setFromAxisAngle(_A, 1.0 * Math.PI * delta * this.acceleration.x)
+      _Q.setFromAxisAngle(
+        _A,
+        1.0 * Math.PI * delta * this.rotationAcceleration.x,
+      )
       _R.multiply(_Q)
     }
 
     if (this.input.keys.rise > 0) {
       _A.set(1, 0, 0)
-      _Q.setFromAxisAngle(_A, 1.0 * -Math.PI * delta * this.acceleration.x)
+      _Q.setFromAxisAngle(
+        _A,
+        1.0 * -Math.PI * delta * this.rotationAcceleration.x,
+      )
       _R.multiply(_Q)
     }
 
@@ -113,8 +146,15 @@ class Controller extends EventDispatcher {
 
     sideways.multiplyScalar(velocity.x * delta)
 
+    const strafe = new Vector3(0, 1, 0)
+    strafe.applyQuaternion(controlObject.quaternion)
+    strafe.normalize()
+
+    strafe.multiplyScalar(velocity.y * delta)
+
     controlObject.position.add(forward)
     controlObject.position.add(sideways)
+    controlObject.position.add(strafe)
   }
 }
 

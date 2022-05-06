@@ -7,14 +7,16 @@ class BasicInput implements Input {
     this.keys = {
       forward: 0,
       backward: 0,
-      left: 0,
-      right: 0,
+      yawLeft: 0,
+      yawRight: 0,
       space: 0,
       shift: 0,
       rollLeft: 0,
       rollRight: 0,
       dive: 0,
       rise: 0,
+      strafeLeft: 0,
+      strafeRight: 0,
     }
 
     document.addEventListener(
@@ -31,13 +33,13 @@ class BasicInput implements Input {
         this.keys.forward = 1
         break
       case 65: // a
-        this.keys.left = 1
+        this.keys.strafeLeft = 1
         break
       case 83: // s
         this.keys.backward = 1
         break
       case 68: // d
-        this.keys.right = 1
+        this.keys.strafeRight = 1
         break
       case 81: // q
         this.keys.rollLeft = 1
@@ -50,6 +52,12 @@ class BasicInput implements Input {
         break
       case 40: // arrowDown
         this.keys.dive = 1
+        break
+      case 37: // arrowLeft
+        this.keys.yawLeft = 1
+        break
+      case 39: // arrowRight
+        this.keys.yawRight = 1
         break
       case 32: // SPACE
         this.keys.space = 1
@@ -66,13 +74,13 @@ class BasicInput implements Input {
         this.keys.forward = 0
         break
       case 65: // a
-        this.keys.left = 0
+        this.keys.strafeLeft = 0
         break
       case 83: // s
         this.keys.backward = 0
         break
       case 68: // d
-        this.keys.right = 0
+        this.keys.strafeRight = 0
         break
       case 81: // q
         this.keys.rollLeft = 0
@@ -85,6 +93,12 @@ class BasicInput implements Input {
         break
       case 40: // arrowDown
         this.keys.dive = 0
+        break
+      case 37: // arrowLeft
+        this.keys.yawLeft = 0
+        break
+      case 39: // arrowRight
+        this.keys.yawRight = 0
         break
       case 32: // SPACE
         this.keys.space = 0

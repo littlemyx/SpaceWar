@@ -1,13 +1,13 @@
 import { useRef, useEffect } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 
-import type { PropsWithChildren, MutableRefObject } from 'react'
-import type { Group } from 'three'
+import type { PropsWithChildren } from 'react'
+import type { Object3D } from 'three'
 
 import ChasingCameraImplementation from './Implementation'
 
 interface Props {
-  target: MutableRefObject<Group>
+  target: Object3D
 }
 
 const ChasingCamera = ({ children, target }: PropsWithChildren<Props>) => {
