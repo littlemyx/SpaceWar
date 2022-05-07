@@ -1,15 +1,13 @@
-import type { Object3D } from 'three'
+import type { Object3D, PerspectiveCamera } from 'three'
+import { MathUtils } from 'three'
 import { Vector3 } from 'three'
-
-// import type { Object3D } from 'three'
-import type { Camera } from '@react-three/fiber'
 
 class ChasingCamera {
   private target: Object3D
-  private camera: Camera
+  private camera: PerspectiveCamera
   private currentPosition: Vector3
 
-  constructor(target: Object3D, camera: Camera) {
+  constructor(target: Object3D, camera: PerspectiveCamera) {
     this.target = target
     this.camera = camera
     this.currentPosition = new Vector3()
@@ -22,7 +20,7 @@ class ChasingCamera {
     return idealOffset
   }
 
-  update(delta: number) {
+  update(delta: number, isAcceleration: boolean) {
     const idealOffset = this.calculateIdealOffset()
 
     const t1 = 1.0 - Math.pow(0.05, delta)
@@ -32,6 +30,16 @@ class ChasingCamera {
 
     this.camera.position.copy(this.currentPosition)
     this.camera.quaternion.slerp(this.target.quaternion, t2)
+
+    if (this.camera.fov < 120 && this.camera.fov > 75) {
+      const t3 = 1.0 - Math.pow(0.05, delta)
+      this.camera.fov = MathUtils.lerp(
+        this.camera.fov,
+        isAcceleration ? 120 : 75,
+        t3,
+      )
+      this.camera.updateProjectionMatrix()
+    }
   }
 }
 

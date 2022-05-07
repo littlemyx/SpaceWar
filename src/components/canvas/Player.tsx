@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 
 import Movement from '@/components/controls/Movement'
 import ChasingCamera from '@/components/cameras/ChasingCamera'
@@ -6,6 +6,7 @@ import type { Group } from 'three'
 
 const BoxComponent = () => {
   const [target, setTarget] = useState(null)
+  const [isAccelerating, setIsAccelerating] = useState(false)
   const targetRef = useRef<Group>(null)
   const [hovered, setHover] = useState(false)
 
@@ -13,10 +14,23 @@ const BoxComponent = () => {
     setTarget(targetRef.current)
   }, [targetRef])
 
+  const acceleratingChangeHandler = useCallback(
+    (state) => {
+      if (state !== isAccelerating) {
+        console.log(state)
+        setIsAccelerating(state)
+      }
+    },
+    [isAccelerating],
+  )
+
   // Return the view, these are regular Threejs elements expressed in JSX
   return (
-    <ChasingCamera target={target}>
-      <Movement ref={targetRef}>
+    <ChasingCamera target={target} isAccelerating={isAccelerating}>
+      <Movement
+        ref={targetRef}
+        onAcceleratingChange={acceleratingChangeHandler}
+      >
         <group>
           <mesh
             position={[0, 0, 1]}

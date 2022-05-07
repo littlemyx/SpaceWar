@@ -11,10 +11,15 @@ class Controller extends EventDispatcher {
   private decceleration: Vector3
   private movementAcceleration: Vector3
   private rotationAcceleration: Vector3
+  private onAcceleratingChange: (state: boolean) => void
 
-  private input: Input
+  input: Input
 
-  constructor(target: Object3D, input: Input) {
+  constructor(
+    target: Object3D,
+    input: Input,
+    onAcceleratingChange: (state: boolean) => void,
+  ) {
     super()
 
     this.target = target
@@ -24,6 +29,7 @@ class Controller extends EventDispatcher {
     this.decceleration = new Vector3(-5.0, -0.0001, -5.0)
     this.movementAcceleration = new Vector3(25.0, 25.0, 50.0)
     this.rotationAcceleration = new Vector3(1.0, 0.25, 50.0)
+    this.onAcceleratingChange = onAcceleratingChange
 
     this.input = input
   }
@@ -59,7 +65,7 @@ class Controller extends EventDispatcher {
     const movementAcceleration = this.movementAcceleration.clone()
 
     if (this.input.keys.shift) {
-      movementAcceleration.multiplyScalar(2.0)
+      movementAcceleration.multiplyScalar(4.0)
     }
 
     if (this.input.keys.forward > 0) {

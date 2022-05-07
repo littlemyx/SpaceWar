@@ -25,28 +25,35 @@ function useCombinedRefs(...refs) {
   return targetRef
 }
 
-const BoxComponent = forwardRef<Group, PropsWithChildren<{}>>(
-  ({ children }, ref) => {
-    // const defaultCamera = useThree((state) => state.camera)
-    const _controller = useRef(null)
+const BoxComponent = forwardRef<
+  Group,
+  PropsWithChildren<{ onAcceleratingChange: (state: boolean) => void }>
+>(({ children, onAcceleratingChange }, ref) => {
+  // const defaultCamera = useThree((state) => state.camera)
+  const _controller = useRef<Controller>(null)
 
-    const group = useRef(null)
-    const combinedRef = useCombinedRefs(ref, group)
+  const group = useRef(null)
+  const combinedRef = useCombinedRefs(ref, group)
 
-    useFrame((state, delta) => {
-      _controller.current.update(delta)
-    })
+  useFrame((state, delta) => {
+    _controller.current.update(delta)
+    if (_controller.current.input.keys.shift) {
+      onAcceleratingChange(true)
+    } else {
+      onAcceleratingChange(false)
+    }
+  })
 
-    useEffect(() => {
-      _controller.current = new Controller(
-        combinedRef.current,
-        new BasicInput(),
-      )
-    }, [])
+  useEffect(() => {
+    _controller.current = new Controller(
+      combinedRef.current,
+      new BasicInput(),
+      onAcceleratingChange,
+    )
+  }, [])
 
-    // Return the view, these are regular Threejs elements expressed in JSX
-    return <group ref={combinedRef}>{children}</group>
-  },
-)
+  // Return the view, these are regular Threejs elements expressed in JSX
+  return <group ref={combinedRef}>{children}</group>
+})
 
 export default BoxComponent
