@@ -3,12 +3,14 @@
 import { PerspectiveCamera } from '@react-three/drei'
 // import { useControls } from 'leva'
 
-import Box from './Box'
 import Player from './Player'
 
 // import useStore from '@/helpers/store'
 
-import SkyBox from './SkyBox'
+import Box from './models/Box'
+import SkyBox from './models/SkyBox'
+
+import Keyboard from './controls/Keyboard'
 
 // const LControl = () => {
 //   const dom = useStore((state) => state.dom)
@@ -46,6 +48,7 @@ const SpaceWar = () => {
       <Box position={[40, 0, 40]} />
       <Box position={[-40, 0, -40]} />
       <Box position={[-40, 0, 40]} />
+      <Keyboard />
     </>
   )
 }

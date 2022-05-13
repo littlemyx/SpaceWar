@@ -8,14 +8,9 @@ import ChasingCameraImplementation from './Implementation'
 
 interface Props {
   target: Object3D
-  isAccelerating: boolean
 }
 
-const ChasingCamera = ({
-  children,
-  target,
-  isAccelerating,
-}: PropsWithChildren<Props>) => {
+const ChasingCamera = ({ children, target }: PropsWithChildren<Props>) => {
   const controls = useRef<ChasingCameraImplementation>(null)
 
   const camera = useThree(({ camera }: { camera: Camera }) => camera)
@@ -31,7 +26,7 @@ const ChasingCamera = ({
 
   useFrame((_, delta) => {
     if (controls.current !== null) {
-      controls.current.update(delta, isAccelerating)
+      controls.current.update(delta)
     }
   })
 

@@ -1,9 +1,9 @@
-import { Vector3, EventDispatcher, Quaternion } from 'three'
+import { Vector3, Quaternion } from 'three'
 import type { Object3D } from 'three'
 
-import type { Input } from '../types'
+import type MovementControlsController from './ControlsController'
 
-class Controller extends EventDispatcher {
+class Controller {
   private target: Object3D
 
   private position: Vector3
@@ -11,17 +11,10 @@ class Controller extends EventDispatcher {
   private decceleration: Vector3
   private movementAcceleration: Vector3
   private rotationAcceleration: Vector3
-  private onAcceleratingChange: (state: boolean) => void
 
-  input: Input
+  controls: MovementControlsController
 
-  constructor(
-    target: Object3D,
-    input: Input,
-    onAcceleratingChange: (state: boolean) => void,
-  ) {
-    super()
-
+  constructor(target: Object3D, controls: MovementControlsController) {
     this.target = target
 
     this.position = new Vector3(0, 0, 0)
@@ -29,14 +22,17 @@ class Controller extends EventDispatcher {
     this.decceleration = new Vector3(-5.0, -0.0001, -5.0)
     this.movementAcceleration = new Vector3(25.0, 25.0, 50.0)
     this.rotationAcceleration = new Vector3(1.0, 0.25, 50.0)
-    this.onAcceleratingChange = onAcceleratingChange
 
-    this.input = input
+    this.controls = controls
   }
+
   update(delta: number) {
     if (!this.target) {
       return
     }
+
+    this.controls.updateActions()
+    const frameActions = this.controls.controls
 
     const velocity = this.velocity
     const frameDecceleration = new Vector3(
@@ -64,27 +60,27 @@ class Controller extends EventDispatcher {
 
     const movementAcceleration = this.movementAcceleration.clone()
 
-    if (this.input.keys.shift) {
+    if (frameActions.accelerate > 0) {
       movementAcceleration.multiplyScalar(4.0)
     }
 
-    if (this.input.keys.forward > 0) {
+    if (frameActions.forward > 0) {
       velocity.z -= movementAcceleration.z * delta
     }
 
-    if (this.input.keys.backward > 0) {
+    if (frameActions.backward > 0) {
       velocity.z += movementAcceleration.z * delta
     }
 
-    if (this.input.keys.strafeLeft > 0) {
+    if (frameActions.strafeLeft > 0) {
       velocity.x -= movementAcceleration.x * delta
     }
 
-    if (this.input.keys.strafeRight > 0) {
+    if (frameActions.strafeRight > 0) {
       velocity.x += movementAcceleration.x * delta
     }
 
-    if (this.input.keys.yawLeft > 0) {
+    if (frameActions.yawLeft > 0) {
       _A.set(0, 1, 0)
       _Q.setFromAxisAngle(
         _A,
@@ -93,7 +89,7 @@ class Controller extends EventDispatcher {
       _R.multiply(_Q)
     }
 
-    if (this.input.keys.yawRight > 0) {
+    if (frameActions.yawRight > 0) {
       _A.set(0, 1, 0)
       _Q.setFromAxisAngle(
         _A,
@@ -102,7 +98,7 @@ class Controller extends EventDispatcher {
       _R.multiply(_Q)
     }
 
-    if (this.input.keys.rollLeft > 0) {
+    if (frameActions.rollLeft > 0) {
       _A.set(0, 0, 1)
       _Q.setFromAxisAngle(
         _A,
@@ -111,7 +107,7 @@ class Controller extends EventDispatcher {
       _R.multiply(_Q)
     }
 
-    if (this.input.keys.rollRight > 0) {
+    if (frameActions.rollRight > 0) {
       _A.set(0, 0, 1)
       _Q.setFromAxisAngle(
         _A,
@@ -120,7 +116,7 @@ class Controller extends EventDispatcher {
       _R.multiply(_Q)
     }
 
-    if (this.input.keys.dive > 0) {
+    if (frameActions.dive > 0) {
       _A.set(1, 0, 0)
       _Q.setFromAxisAngle(
         _A,
@@ -129,7 +125,7 @@ class Controller extends EventDispatcher {
       _R.multiply(_Q)
     }
 
-    if (this.input.keys.rise > 0) {
+    if (frameActions.rise > 0) {
       _A.set(1, 0, 0)
       _Q.setFromAxisAngle(
         _A,

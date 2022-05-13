@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 
-const SpaceWar = dynamic(() => import('@/components/canvas/SpaceWar'), {
+const SpaceWar = dynamic(() => import('@/components/SpaceWar/SpaceWar'), {
   ssr: false,
 })
 
