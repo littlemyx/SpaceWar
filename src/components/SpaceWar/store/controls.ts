@@ -43,6 +43,7 @@ export const createControlsActions: StoreSlice<IState, ControlAction> = (
     }
     return acc
   }, {} as ControlAction)
+
   return actions
 }
 

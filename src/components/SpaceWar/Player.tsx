@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 
 import Movement from '@/components/SpaceWar/controls/Movement'
-import ChasingCamera from '@/components/SpaceWar/cameras/ChasingCamera'
+import ConnectedCamera from '@/components/SpaceWar/connectedToStore/ConnectedCamera'
 import type { Group } from 'three'
 
 const BoxComponent = () => {
@@ -15,7 +15,8 @@ const BoxComponent = () => {
 
   // Return the view, these are regular Threejs elements expressed in JSX
   return (
-    <ChasingCamera target={target}>
+    <group>
+      <ConnectedCamera target={target} />
       <Movement ref={targetRef}>
         <group>
           <mesh
@@ -41,7 +42,7 @@ const BoxComponent = () => {
           <ambientLight />
         </group>
       </Movement>
-    </ChasingCamera>
+    </group>
   )
 }
 export default BoxComponent
