@@ -4,6 +4,7 @@ import shallow from 'zustand/shallow'
 import type { GetState, SetState, StateSelector } from 'zustand'
 
 import type { IControlsState, ControlAction } from './controls'
+import type { IViewState, ViewAction } from './view'
 
 import type { InputMap } from './keyboard'
 
@@ -13,10 +14,12 @@ import {
   createControlsInputMap,
 } from './controls'
 
+import { createViewActions, createViewState, createViewInputMap } from './view'
+
 type Getter = GetState<IState>
 export type Setter = SetState<IState>
 
-type Actions = ControlAction
+type Actions = ControlAction & ViewAction
 
 type InputMaps = ReturnType<typeof createControlsInputMap>
 
@@ -25,14 +28,21 @@ export type IState = {
   inputMap: InputMap<InputMaps>
   get: Getter
   set: Setter
-} & IControlsState
+} & IControlsState &
+  IViewState
 
 const useStoreImpl = create<IState>(
   (set: SetState<IState>, get: GetState<IState>) => {
     const state: IState = {
-      actions: { ...createControlsActions(set, get) },
-      inputMap: { ...createControlsInputMap() },
-      ...createControlsState(),
+      actions: {
+        ...createControlsActions(set, get),
+        ...createViewActions(set, get),
+      },
+      inputMap: { ...createControlsInputMap(), ...createViewInputMap() },
+      controls: {
+        ...createControlsState().controls,
+        ...createViewState().controls,
+      },
       set,
       get,
     }

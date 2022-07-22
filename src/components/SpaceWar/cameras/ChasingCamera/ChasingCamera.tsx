@@ -13,14 +13,14 @@ interface Props {
 }
 
 const ChasingCamera = ({ target, zoomingFOV }: Props) => {
-  const controls = useRef<ChasingCameraImplementation>(null)
+  const controller = useRef<ChasingCameraImplementation>(null)
   const effects = useRef<Partial<Effects>>({})
 
   const camera = useThree(({ camera }: { camera: Camera }) => camera)
 
   useEffect(() => {
     if (target !== null) {
-      controls.current = new ChasingCameraImplementation(
+      controller.current = new ChasingCameraImplementation(
         target,
         camera as PerspectiveCamera,
       )
@@ -30,8 +30,8 @@ const ChasingCamera = ({ target, zoomingFOV }: Props) => {
   useFrame((_, delta) => {
     effects.current.zoomingFOV = zoomingFOV
 
-    if (controls.current !== null) {
-      controls.current.update(delta, effects.current)
+    if (controller.current !== null) {
+      controller.current.update(delta, effects.current)
     }
   })
 

@@ -1,16 +1,18 @@
 // import { useRef, useState, useEffect } from 'react'
 // import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
-import { PerspectiveCamera } from '@react-three/drei'
+// import { PerspectiveCamera } from '@react-three/drei'
 // import { useControls } from 'leva'
+
+import { Cameras } from './effects/Cameras'
 
 import Player from './Player'
 
 // import useStore from '@/helpers/store'
 
-import Box from './models/Box'
 import SkyBox from './models/SkyBox'
 
 import Keyboard from './controls/Keyboard'
+import Waypoint from './Waypoint'
 
 // const LControl = () => {
 //   const dom = useStore((state) => state.dom)
@@ -36,18 +38,13 @@ const SpaceWar = () => {
   // })
   return (
     <>
-      <PerspectiveCamera
-        makeDefault
-        fov={75}
-        rotation={[0, Math.PI, 0]}
-        position={[0, 10, -20]}
-      />
+      <Cameras />
       <SkyBox />
       <Player />
-      <Box position={[40, 0, -40]} />
-      <Box position={[40, 0, 40]} />
-      <Box position={[-40, 0, -40]} />
-      <Box position={[-40, 0, 40]} />
+      <Waypoint position={[40, 0, -40]} />
+      <Waypoint position={[40, 0, 40]} />
+      <Waypoint position={[-40, 0, -40]} />
+      <Waypoint position={[-40, 0, 40]} />
       <Keyboard />
     </>
   )
