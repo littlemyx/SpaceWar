@@ -17,16 +17,18 @@ export type IViewState = {
 
 type View = keyof Views
 
-export type ViewAction = Record<View, () => void>
+export type ViewAction = Record<View, (skip: number) => void>
 
 export const createViewState = () => ({ controls: initialState })
 
 export const createViewActions: StoreSlice<IState, ViewAction> = (set) => {
   const actions = keys(initialState).reduce<ViewAction>((acc, control) => {
-    acc[control] = () => {
-      set((state) => ({
-        controls: { ...state.controls, [control]: !state.controls[control] },
-      }))
+    acc[control] = (value: number) => {
+      if (value === 0) {
+        set((state) => ({
+          controls: { ...state.controls, [control]: !state.controls[control] },
+        }))
+      }
     }
     return acc
   }, {} as ViewAction)

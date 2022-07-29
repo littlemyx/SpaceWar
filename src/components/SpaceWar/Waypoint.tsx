@@ -5,10 +5,11 @@ import Box from './models/Box'
 
 interface Props {
   position: number[]
+  color?: string
 }
 
-const Waypoint = ({ position }: Props) => {
-  const color = useRef(new Color('red'))
+const Waypoint = ({ position, color: colorProp = 'red' }: Props) => {
+  const color = useRef(new Color(colorProp))
 
   return <Box position={position} color={color.current} />
 }

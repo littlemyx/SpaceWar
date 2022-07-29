@@ -20,34 +20,34 @@ const initialState = {
   yawRight: 0,
 }
 
-export type Controls = AbstractControls<keyof typeof initialState, number>
+export type Movements = AbstractControls<keyof typeof initialState, number>
 
-export type IControlsState = {
-  controls: Controls
+export type IMovementState = {
+  controls: Movements
 }
 
-type Control = keyof Controls
+type Movement = keyof Movements
 
-export type ControlAction = Record<Control, (value: number) => void>
+export type MovementAction = Record<Movement, (value: number) => void>
 
-export const createControlsState = () => ({ controls: initialState })
+export const createMovementsState = () => ({ controls: initialState })
 
-export const createControlsActions: StoreSlice<IState, ControlAction> = (
+export const createMovementsActions: StoreSlice<IState, MovementAction> = (
   set,
 ) => {
-  const actions = keys(initialState).reduce<ControlAction>((acc, control) => {
+  const actions = keys(initialState).reduce<MovementAction>((acc, control) => {
     acc[control] = (value: number) => {
       set((state) => ({
         controls: { ...state.controls, [control]: value },
       }))
     }
     return acc
-  }, {} as ControlAction)
+  }, {} as MovementAction)
 
   return actions
 }
 
-const controlsInputMap: InputMap<Controls> = {
+const controlsInputMap: InputMap<Movements> = {
   forward: ['w'],
   backward: ['s'],
   strafeLeft: ['a'],
@@ -62,4 +62,4 @@ const controlsInputMap: InputMap<Controls> = {
   yawRight: ['arrowright'],
 }
 
-export const createControlsInputMap = () => controlsInputMap
+export const createMovementsInputMap = () => controlsInputMap

@@ -41,10 +41,10 @@ const SpaceWar = () => {
       <Cameras />
       <SkyBox />
       <Player />
-      <Waypoint position={[40, 0, -40]} />
-      <Waypoint position={[40, 0, 40]} />
-      <Waypoint position={[-40, 0, -40]} />
-      <Waypoint position={[-40, 0, 40]} />
+      <Waypoint position={[40, 0, -40]} color="red" />
+      <Waypoint position={[40, 0, 40]} color="blue" />
+      <Waypoint position={[-40, 0, -40]} color="green" />
+      <Waypoint position={[-40, 0, 40]} color="red" />
       <Keyboard />
     </>
   )

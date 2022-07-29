@@ -3,44 +3,44 @@ import shallow from 'zustand/shallow'
 
 import type { GetState, SetState, StateSelector } from 'zustand'
 
-import type { IControlsState, ControlAction } from './controls'
+import type { IMovementState, MovementAction } from './movement'
 import type { IViewState, ViewAction } from './view'
 
 import type { InputMap } from './keyboard'
 
 import {
-  createControlsActions,
-  createControlsState,
-  createControlsInputMap,
-} from './controls'
+  createMovementsActions,
+  createMovementsState,
+  createMovementsInputMap,
+} from './movement'
 
 import { createViewActions, createViewState, createViewInputMap } from './view'
 
 type Getter = GetState<IState>
 export type Setter = SetState<IState>
 
-type Actions = ControlAction & ViewAction
+type Actions = MovementAction & ViewAction
 
-type InputMaps = ReturnType<typeof createControlsInputMap>
+type InputMaps = ReturnType<typeof createMovementsInputMap>
 
 export type IState = {
   actions: Actions
   inputMap: InputMap<InputMaps>
   get: Getter
   set: Setter
-} & IControlsState &
+} & IMovementState &
   IViewState
 
 const useStoreImpl = create<IState>(
   (set: SetState<IState>, get: GetState<IState>) => {
     const state: IState = {
       actions: {
-        ...createControlsActions(set, get),
+        ...createMovementsActions(set, get),
         ...createViewActions(set, get),
       },
-      inputMap: { ...createControlsInputMap(), ...createViewInputMap() },
+      inputMap: { ...createMovementsInputMap(), ...createViewInputMap() },
       controls: {
-        ...createControlsState().controls,
+        ...createMovementsState().controls,
         ...createViewState().controls,
       },
       set,
