@@ -11,7 +11,7 @@ interface Props {
   target: Object3D
 }
 
-const Movement = ({ target }: Props) => {
+const TopDownMovment = ({ target }: Props) => {
   // const defaultCamera = useThree((state) => state.camera)
   const _controller = useRef<Controller>(null)
 
@@ -30,4 +30,4 @@ const Movement = ({ target }: Props) => {
   return null
 }
 
-export default Movement
+export default TopDownMovment

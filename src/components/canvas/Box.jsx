@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 
-const BoxComponent = ({color, ...props} ) => {
+const BoxComponent = ({color="red", ...props} ) => {
   // This reference will give us direct access to the THREE.Mesh object
   const mesh = useRef(null)
   // Set up state for the hovered and active state

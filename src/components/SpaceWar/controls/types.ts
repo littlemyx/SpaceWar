@@ -2,11 +2,18 @@ import type { GetState } from 'zustand'
 
 import type { IState } from '@/components/SpaceWar/store'
 
-import type { Controls } from '@/components/SpaceWar/types'
+import type { Controls, Waypoint } from '@/components/SpaceWar/types'
 
-export interface IControls {
+interface IConnectedToStore {
+  provider: ZustandStoreProvider
+  updateValues: () => void
+}
+
+export interface IControls extends IConnectedToStore {
   controls: Controls<string, number | boolean>
-  updateActions: () => void
+}
+export interface IWaypoints extends IConnectedToStore {
+  waypoints: Waypoint[]
 }
 
 type ZustandStoreProvider = GetState<IState>
@@ -20,7 +27,21 @@ export class ControlsController implements IControls {
     this.controls = this.provider().controls
   }
 
-  updateActions() {
+  updateValues() {
     this.controls = this.provider().controls
+  }
+}
+
+export class WaypointsController implements IWaypoints {
+  waypoints: Waypoint[]
+  provider: ZustandStoreProvider
+
+  constructor(provider: ZustandStoreProvider) {
+    this.provider = provider
+    this.waypoints = this.provider().waypoints
+  }
+
+  updateValues() {
+    this.waypoints = this.provider().waypoints
   }
 }

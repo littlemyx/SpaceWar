@@ -12,7 +12,7 @@ import Player from './Player'
 import SkyBox from './models/SkyBox'
 
 import Keyboard from './controls/Keyboard'
-import Waypoint from './Waypoint'
+import NavBeacon from './models/NavBeacon'
 
 // const LControl = () => {
 //   const dom = useStore((state) => state.dom)
@@ -41,10 +41,10 @@ const SpaceWar = () => {
       <Cameras />
       <SkyBox />
       <Player />
-      <Waypoint position={[40, 0, -40]} color="red" />
-      <Waypoint position={[40, 0, 40]} color="blue" />
-      <Waypoint position={[-40, 0, -40]} color="green" />
-      <Waypoint position={[-40, 0, 40]} color="red" />
+      <NavBeacon position={[20, 0, -20]} color="red" />
+      <NavBeacon position={[20, 0, 20]} color="blue" />
+      <NavBeacon position={[-20, 0, -20]} color="green" />
+      <NavBeacon position={[-20, 0, 20]} color="red" />
       <Keyboard />
     </>
   )

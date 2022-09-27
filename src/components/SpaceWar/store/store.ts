@@ -3,8 +3,11 @@ import shallow from 'zustand/shallow'
 
 import type { GetState, SetState, StateSelector } from 'zustand'
 
-import type { IMovementState, MovementAction } from './movement'
-import type { IViewState, ViewAction } from './view'
+import type { Waypoint } from '../types'
+
+import type { MovementAction, Movements } from './movement'
+import type { ViewAction, Views } from './view'
+import type { WaypointActions } from './waypoints'
 
 import type { InputMap } from './keyboard'
 
@@ -16,20 +19,30 @@ import {
 
 import { createViewActions, createViewState, createViewInputMap } from './view'
 
+import {
+  createWaypointActions,
+  initialState as initialWaypoints,
+} from './waypoints'
+
 type Getter = GetState<IState>
 export type Setter = SetState<IState>
 
-type Actions = MovementAction & ViewAction
+type Actions = MovementAction & ViewAction & WaypointActions
+type Controls = Views & Movements
 
-type InputMaps = ReturnType<typeof createMovementsInputMap>
+type InputMaps = ReturnType<typeof createMovementsInputMap> &
+  ReturnType<typeof createViewInputMap>
+
+type stateInputMap = InputMap<InputMaps>
 
 export type IState = {
   actions: Actions
-  inputMap: InputMap<InputMaps>
+  inputMap: stateInputMap
+  controls: Controls
+  waypoints: Waypoint[]
   get: Getter
   set: Setter
-} & IMovementState &
-  IViewState
+}
 
 const useStoreImpl = create<IState>(
   (set: SetState<IState>, get: GetState<IState>) => {
@@ -37,7 +50,9 @@ const useStoreImpl = create<IState>(
       actions: {
         ...createMovementsActions(set, get),
         ...createViewActions(set, get),
+        ...createWaypointActions(set, get),
       },
+      waypoints: initialWaypoints,
       inputMap: { ...createMovementsInputMap(), ...createViewInputMap() },
       controls: {
         ...createMovementsState().controls,

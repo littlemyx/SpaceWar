@@ -62,4 +62,5 @@ const controlsInputMap: InputMap<Movements> = {
   yawRight: ['arrowright'],
 }
 
-export const createMovementsInputMap = () => controlsInputMap
+export const createMovementsInputMap = (): InputMap<Movements> =>
+  controlsInputMap

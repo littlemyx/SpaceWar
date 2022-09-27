@@ -1,4 +1,5 @@
 import { Canvas } from '@react-three/fiber'
+import { Physics, Debug } from '@react-three/cannon'
 import { Preload } from '@react-three/drei'
 import { Perf } from 'r3f-perf'
 
@@ -17,7 +18,11 @@ const LCanvas = ({ children }) => {
     >
       <Preload all />
       <Perf position="bottom-right" />
-      {children}
+      <Physics>
+        <Debug color="black" scale={1.1}>
+          {children}
+        </Debug>
+      </Physics>
     </Canvas>
   )
 }

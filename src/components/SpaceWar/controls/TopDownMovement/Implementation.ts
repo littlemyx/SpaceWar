@@ -31,7 +31,7 @@ class Controller {
       return
     }
 
-    this.controls.updateActions()
+    this.controls.updateValues()
     const frameActions = this.controls.controls
 
     const velocity = this.velocity

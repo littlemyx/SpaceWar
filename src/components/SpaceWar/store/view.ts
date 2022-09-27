@@ -6,7 +6,7 @@ import type { IState } from './store'
 import type { InputMap } from './keyboard'
 
 const initialState = {
-  mapView: false,
+  mapView: true,
 }
 
 export type Views = AbstractControls<keyof typeof initialState, boolean>

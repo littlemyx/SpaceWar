@@ -1,22 +1,38 @@
 import { useState, useRef, useEffect } from 'react'
+import { useBox } from '@react-three/cannon'
 
 import Controls from '@/components/SpaceWar/controls'
 
 import type { Group } from 'three'
 
 const Player = () => {
-  const [target, setTarget] = useState(null)
+  const [target, setTarget] = useState({ target: null, api: null })
   const targetRef = useRef<Group>(null)
   const [hovered, setHover] = useState(false)
 
+  const [, api] = useBox(
+    () => ({
+      isTrigger: true,
+      userData: { trigger: true },
+      onCollideBegin: (event) => {
+        console.log('triggered with', event)
+      },
+      type: 'Dynamic',
+      args: [1, 1, 1],
+      rotation: [0, 0, 0],
+      position: [0, 0, 1],
+    }),
+    target.target,
+  )
+
   useEffect(() => {
-    setTarget(targetRef.current)
+    setTarget({ target: targetRef.current, api })
   }, [targetRef])
 
   // Return the view, these are regular Threejs elements expressed in JSX
   return (
     <group>
-      <Controls target={target} />
+      <Controls target={target.target} api={target.api} />
       <group ref={targetRef}>
         <mesh
           position={[0, 0, 1]}
